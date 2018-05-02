@@ -1,5 +1,6 @@
 package com.example.topsongsbyyear;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -31,8 +32,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         String year = yearsAdapter.getItem(position);
-
-
+        Intent intent = new Intent(this, SongList.class);
+        intent.putExtra("year", year);
+        startActivity(intent);
     }
 
 }
