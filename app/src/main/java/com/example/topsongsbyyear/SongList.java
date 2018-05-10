@@ -57,8 +57,6 @@ public class SongList extends AppCompatActivity implements Response.ErrorListene
         Log.i("----------------", "onResponse executed");
         Document doc = Jsoup.parse(response);
         parseHtml(doc);
-        //call setData function in adapter
-        //in setData, save the data and call notifyDataSetChanged (adapter method), which updates list view
     }
 
     @Override
@@ -87,13 +85,8 @@ public class SongList extends AppCompatActivity implements Response.ErrorListene
             RowItem row = new RowItem(Integer.toString(i+1), songList.get(i), artistList.get(i), imageUrls.get(i));
             rows.add(row);
         }
-        Log.i("----------------", "Just added to rows arrayList with songList size: " + songList.size() + " artistList size: " + artistList.size() + "and imageUrls size: " +imageUrls.size());
-        Log.i("----------------", "Just before setting making customAdapter instance with row count " + rows.size());
         customAdapter = new CustomAdapter(this, R.layout.row_layout, rows);
         list.setAdapter(customAdapter);
-//        if (customAdapter instanceof CustomAdapter){
-//            ((CustomAdapter) customAdapter).setData(rows);
-//        }
         Log.i("----------------","Adapter set after html parsed, with row count " + rows.size());
 
 
