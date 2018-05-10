@@ -14,14 +14,14 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     ListView yearsView;
     private ArrayAdapter<String> yearsAdapter;
-    ArrayList<String> years;
+    ArrayList<String> years = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         yearsView = findViewById(R.id.yearsView);
-        for(int i = 2006; i < 2018 ; i++){
+        for(int i = 2017; i > 2005 ; i--){
             years.add(Integer.toString(i));
         }
         yearsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, years);
