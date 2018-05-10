@@ -2,7 +2,6 @@ package com.example.topsongsbyyear;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,9 +20,11 @@ public class CustomAdapter extends ArrayAdapter<RowItem> {
     TextView artist;
     TextView rank;
     ImageView image;
+    String theme;
 
-    public CustomAdapter(@NonNull Context context, int resource, ArrayList<RowItem> rows) {
+    public CustomAdapter(@NonNull Context context, int resource, ArrayList<RowItem> rows, String theme) {
         super(context, resource, rows);
+        this.theme = theme;
         this.context = context;
         notifyDataSetChanged();
     }
@@ -38,7 +39,18 @@ public class CustomAdapter extends ArrayAdapter<RowItem> {
         LayoutInflater inflater = LayoutInflater.from(getContext());
         View customView = convertView;
         if (convertView == null)
-            customView = inflater.inflate(R.layout.row_layout, parent, false);
+            switch(theme){
+                case "dark":
+                    customView = inflater.inflate(R.layout.row_layout_dark, parent, false);
+                    break;
+                case "light":
+                    customView = inflater.inflate(R.layout.row_layout_light, parent, false);
+                    break;
+                default:
+                    customView = inflater.inflate(R.layout.row_layout_light, parent, false);
+                    break;
+            }
+
 
         String singleSong = getItem(position).getSong();
         String singleArtist = getItem(position).getArtist();

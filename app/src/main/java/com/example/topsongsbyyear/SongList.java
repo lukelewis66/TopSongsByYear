@@ -3,6 +3,9 @@ package com.example.topsongsbyyear;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
@@ -29,21 +32,55 @@ public class SongList extends AppCompatActivity implements Response.ErrorListene
     RowItem row;
     ListView list;
     ArrayList<RowItem> rows;
+    ArrayList<String> songList;
+    ArrayList<String> artistList;
+    ArrayList<String> imageUrls;
     ListAdapter customAdapter;
+    String theme;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         year = getIntent().getStringExtra("year");
+        theme = getIntent().getStringExtra("theme");
+        Log.i("-------------", "Theme: " + theme);
+        setTitle("Top Songs of " + year);
         webUrl = "https://www.billboard.com/charts/year-end/" + year + "/hot-100-songs";
         setContentView(R.layout.activity_song_list);
         rows = new ArrayList<RowItem>();
         list = (ListView) findViewById(R.id.all_list);
-        list.setAdapter(customAdapter);
+        //list.setAdapter(customAdapter);
         requestQueue = Volley.newRequestQueue(this);
         stringRequest = new StringRequest(Request.Method.GET, webUrl, this, this);
         requestQueue.add(stringRequest);
         requestQueue.start();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.dark_theme:
+                theme = "dark";
+                customAdapter = new CustomAdapter(this, R.layout.row_layout_dark, rows, theme);
+                list.setAdapter(customAdapter);
+                Log.i("------------", "Dark theme applied");
+                return true;
+            case R.id.light_theme:
+                theme = "light";
+                customAdapter = new CustomAdapter(this, R.layout.row_layout_light, rows, theme);
+                list.setAdapter(customAdapter);
+                Log.i("------------", "Light theme applied");
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
@@ -65,9 +102,9 @@ public class SongList extends AppCompatActivity implements Response.ErrorListene
     }
 
     public void parseHtml(Document doc){
-        ArrayList<String> songList = new ArrayList<>();
-        ArrayList<String> artistList = new ArrayList<>();
-        ArrayList<String> imageUrls = new ArrayList<>();
+        songList = new ArrayList<>();
+        artistList = new ArrayList<>();
+        imageUrls = new ArrayList<>();
         rows = new ArrayList<RowItem>();
         Elements songs = doc.select(".ye-chart-item__title");
         for(Element song : songs){
@@ -85,7 +122,22 @@ public class SongList extends AppCompatActivity implements Response.ErrorListene
             RowItem row = new RowItem(Integer.toString(i+1), songList.get(i), artistList.get(i), imageUrls.get(i));
             rows.add(row);
         }
-        customAdapter = new CustomAdapter(this, R.layout.row_layout, rows);
+        Log.i("-------------", "Before we set out theme, with theme: " + theme);
+        switch (theme){
+            case "dark":
+                Log.i("--------------", "Theme is dark");
+                customAdapter = new CustomAdapter(this, R.layout.row_layout_dark, rows, theme);
+                break;
+            case "light":
+                Log.i("--------------", "Theme is light");
+                customAdapter = new CustomAdapter(this, R.layout.row_layout_light, rows, theme);
+                break;
+            default:
+                customAdapter = new CustomAdapter(this, R.layout.row_layout_light, rows, theme);
+                break;
+        }
+
+
         list.setAdapter(customAdapter);
         Log.i("----------------","Adapter set after html parsed, with row count " + rows.size());
 
