@@ -65,17 +65,22 @@ public class SongList extends AppCompatActivity implements Response.ErrorListene
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        int lastPos;
         switch (item.getItemId()) {
             case R.id.dark_theme:
                 theme = "dark";
                 setTheme();
+                lastPos = list.getLastVisiblePosition();
                 list.setAdapter(customAdapter);
+                list.setSelection(lastPos-7);
                 Log.i("------------", "Dark theme applied");
                 return true;
             case R.id.light_theme:
                 theme = "light";
                 setTheme();
+                lastPos = list.getLastVisiblePosition();
                 list.setAdapter(customAdapter);
+                list.setSelection(lastPos-7);
                 Log.i("------------", "Light theme applied");
                 return true;
             default:

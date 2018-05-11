@@ -56,10 +56,10 @@ public class CustomAdapter extends ArrayAdapter<RowItem> {
         String singleArtist = getItem(position).getArtist();
         String singleRank = getItem(position).getRank();
         String singleImage = getItem(position).getPicUrl();
-        songName = (TextView) customView.findViewById(R.id.title);
-        artist = (TextView) customView.findViewById(R.id.artist);
-        rank = (TextView) customView.findViewById(R.id.rank);
-        image = (ImageView) customView.findViewById(R.id.list_image);
+        songName = customView.findViewById(R.id.title);
+        artist = customView.findViewById(R.id.artist);
+        rank = customView.findViewById(R.id.rank);
+        image = customView.findViewById(R.id.list_image);
         songName.setText(singleSong);
         artist.setText(singleArtist);
         rank.setText(singleRank);
