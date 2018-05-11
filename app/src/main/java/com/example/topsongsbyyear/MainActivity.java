@@ -1,6 +1,8 @@
 package com.example.topsongsbyyear;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,8 +13,11 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
+
+import static java.lang.Integer.parseInt;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
@@ -32,16 +37,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.dark_theme:
-                yearsAdapter = new ArrayAdapter<>(this, R.layout.simple_list_item_dark, years);
-                yearsView.setAdapter(yearsAdapter);
                 theme = "dark";
-                Log.i("--------------", "theme is now " + theme);
+                setTheme();
                 return true;
             case R.id.light_theme:
-                yearsAdapter = new ArrayAdapter<>(this, R.layout.simple_list_item_light, years);
-                yearsView.setAdapter(yearsAdapter);
                 theme = "light";
-                Log.i("--------------", "theme is now " + theme);
+                setTheme();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -72,4 +73,44 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         startActivity(intent);
     }
 
+    @Override
+    protected void onPause() {
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
+        editor.putString("theme", theme);
+        editor.commit();
+
+        super.onPause();
+    }
+
+
+    @Override
+    protected void onResume() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        theme = prefs.getString("theme", "light");
+        setTheme();
+        super.onResume();
+    }
+
+    void setTheme(){
+        switch (theme) {
+            case "dark":
+                yearsAdapter = new ArrayAdapter<>(this, R.layout.simple_list_item_dark, years);
+                yearsView.setAdapter(yearsAdapter);
+                theme = "dark";
+                Log.i("--------------", "theme is now " + theme);
+                break;
+            case "light":
+                yearsAdapter = new ArrayAdapter<>(this, R.layout.simple_list_item_light, years);
+                yearsView.setAdapter(yearsAdapter);
+                theme = "light";
+                Log.i("--------------", "theme is now " + theme);
+                break;
+            default:
+                yearsAdapter = new ArrayAdapter<>(this, R.layout.simple_list_item_light, years);
+                yearsView.setAdapter(yearsAdapter);
+                theme = "light";
+                Log.i("--------------", "theme is now " + theme);
+                break;
+        }
+    }
 }

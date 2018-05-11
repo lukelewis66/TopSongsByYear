@@ -68,13 +68,13 @@ public class SongList extends AppCompatActivity implements Response.ErrorListene
         switch (item.getItemId()) {
             case R.id.dark_theme:
                 theme = "dark";
-                customAdapter = new CustomAdapter(this, R.layout.row_layout_dark, rows, theme);
+                setTheme();
                 list.setAdapter(customAdapter);
                 Log.i("------------", "Dark theme applied");
                 return true;
             case R.id.light_theme:
                 theme = "light";
-                customAdapter = new CustomAdapter(this, R.layout.row_layout_light, rows, theme);
+                setTheme();
                 list.setAdapter(customAdapter);
                 Log.i("------------", "Light theme applied");
                 return true;
@@ -123,6 +123,12 @@ public class SongList extends AppCompatActivity implements Response.ErrorListene
             rows.add(row);
         }
         Log.i("-------------", "Before we set out theme, with theme: " + theme);
+        setTheme();
+        list.setAdapter(customAdapter);
+        Log.i("----------------","Adapter set after html parsed, with row count " + rows.size());
+    }
+
+    void setTheme(){
         switch (theme){
             case "dark":
                 Log.i("--------------", "Theme is dark");
@@ -136,13 +142,5 @@ public class SongList extends AppCompatActivity implements Response.ErrorListene
                 customAdapter = new CustomAdapter(this, R.layout.row_layout_light, rows, theme);
                 break;
         }
-
-
-        list.setAdapter(customAdapter);
-        Log.i("----------------","Adapter set after html parsed, with row count " + rows.size());
-
-
-
-
     }
 }
